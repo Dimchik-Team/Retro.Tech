@@ -1,0 +1,124 @@
+/* --- Базовые стили для имитации старого монитора --- */
+
+/* 1. Подготовка фона и общего вида */
+body {
+    /* Темный фон, чтобы было похоже на выключенный монитор в полумраке */
+    background-color: #111;
+    color: #e0e0e0; /* Светло-серый цвет текста, как на VGA-экранах */
+    font-family: 'Courier New', Courier, monospace; /* Классический моноширинный шрифт */
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden; /* Важно, чтобы полосы развертки не создавали скролл */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 2. Главный контейнер - имитация экрана */
+.monitor-screen {
+    /* Создаем "коробку" монитора */
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    padding-bottom: 75%; /* Соотношение сторон 4:3 */
+    background-color: #000;
+    border: 10px solid #222;
+    box-shadow: inset 0 0 20px rgba(0,255,0,0.3), /* Внутреннее зеленоватое свечение */
+                 0 0 50px rgba(0,255,0,0.4); /* Внешний ореол */
+
+    /* Имитируем слегка выпуклое стекло с помощью скругления и тени */
+    border-radius: 15px;
+}
+
+/* Все содержимое экрана помещаем внутрь этого блока */
+.screen-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    /* Ключевой эффект - имитация изогнутой поверхности ЭЛТ-трубки */
+    transform: perspective(1000px) rotateX(1deg) rotateY(-1deg) scale(1.02);
+
+    /* Чтобы текст не был размытым из-за фильтра на родителе */
+    filter: none;
+}
+
+/* Стили для текста и заголовков в стиле ретро-писишника */
+h1, h2 {
+    color: #0f0; /* Ярко-зеленый заголовок */
+    text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; /* Свечение вокруг текста */
+}
+
+p {
+    color: #ddd; /* Светло-серый для основного текста */
+}
+
+/* Стили для списков преимуществ */
+ul {
+    list-style-type: disc;
+}
+
+li {
+    color: #ccc;
+}
+
+/* Стили для футера и хедера */
+header, footer {
+    text-align: center;
+}
+footer p {
+    color: #888; /* Более тусклый цвет для футера */
+}
+
+/* --- Визуальные эффекты развертки и шума --- */
+
+/* 3. Эффект мерцания и сканлайнов (полосы развертки) */
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    /* Создаем фон с горизонтальными линиями (сканлайнами) */
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+
+    /* Размер одной "плитки" фона - это и есть шаг сканлайнов и шума */
+    background-size: 100% 4px, 4px 100%;
+
+    /* Анимация движения полос развертки сверху вниз */
+    animation: scanline-move 4s linear infinite;
+
+    /* Добавляем легкий шум (снег) на экране */
+    background-image:
+        linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(255,255,255,0.1) 1px, transparent 1px);
+
+    background-size: 100% 4px, 4px 100%, 8px 8px;
+}
+
+/* Анимация для движения полос развертки */
+@keyframes scanline-move {
+    from { background-position-y: -4px; }
+    to   { background-position-y: calc(100% + 4px); }
+}
+
+/* Добавляем эффект легкого "гало" или расфокусировки по краям экрана */
+.monitor-screen::before {
+    content: '';
+    position: absolute;
+    inset: -2px; /* Немного за пределами основного блока */
+
+    /* Фильтр для создания эффекта расфокусировки и зеленого оттенка по краям */
+    filter: blur(3px) brightness(1.1) saturate(1.3);
+
+    /* Чтобы эффект был виден только по краям */
+    z-index: -1;
+}
